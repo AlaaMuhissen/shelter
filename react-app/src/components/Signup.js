@@ -4,7 +4,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ref, set } from "firebase/database";
 import './Form.css' 
-import { setDoc,doc } from "firebase/firestore";
+import { collection,addDoc,setDoc,doc } from "firebase/firestore";
+import { async } from "@firebase/util";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -19,30 +20,41 @@ const SignUp = () => {
     e.preventDefault();
     function onRegister() {
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          set(ref(firestore, "users/" + userCredential.user.uid), {
-            password: password,
-            email: email,
-          });
+        .then(() => {
+         
+           setDoc(doc(firestore, "users", auth.lastNotifiedUid), 
+          {
+          fname: name,
+          email: email,
+          phoneNumber: phone,
+          type:type
+        }
+          );
+
+        
         })
-        .catch((error) => console.log(error));
-      navigate("/staff");
+        .catch((error) => console.log(error)).then(()=>{navigate("/staff");})
+        .then(()=>{ alert("המשתמש נוסף בהצלחה");})
     }
 
-     setDoc(doc(firestore, "users",email), {
-      fname: name,
-      email: email,
-      phoneNumber: phone,
-      type:type
-    });
-    onRegister();
+      onRegister();
+    
+
+
+    //  addDoc(doc(firestore, "users"), {
+    //   fname: name,
+    //   email: email,
+    //   phoneNumber: phone,
+    //   type:type
+    // });
+    
 
   };
 
   return (
     <div className="text-end">
     <div className="mx-auto">
-      <div className="row align-items-center my-5">
+      <div className="login my-5">
           <h1 className="font-weight-light">: הוספת איש צוות</h1>
       <form className="signupForm" onSubmit={handleSubmit}> 
         <div className="mb-3">
@@ -80,6 +92,8 @@ const SignUp = () => {
               <option value="מנהל">מנהל</option>
               <option value="רכז">רכז</option>
               <option value="עובד סוציאלי">עובד סוציאלי</option>
+              <option value="אם בית">אם בית</option>
+
             </select>
         </div> 
          <div className="mb-3"> 

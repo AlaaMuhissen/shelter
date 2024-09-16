@@ -1,0 +1,23 @@
+.centerTitle{
+  text-align: center;
+  font-size: 32px ;
+  font-weight: bold;
+}
+.center{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+button {
+  transition-duration: 0.4s;
+  border-radius: 12px;
+  background-color:white; /* Green */
+  border-style: none;
+
+}
+
+button:hover {
+  background-color: orangered; /* Green */
+  color: white;
+}

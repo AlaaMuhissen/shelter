@@ -3,23 +3,17 @@ import "./User.css"
 import { getDetailsUserById, updateDetailsUserById,auth } from "../firebase"
 import { onAuthStateChanged } from "firebase/auth";
 
-
 class User extends React.Component {
   
   constructor(props) {
     super(props);
     this.isClicked = true;
     
-    // this.state = {
-    //   fields: {},
-    //   errors: {},
-    // };
-    // this.error ={errorFName:"",errorLName:"",errorPhone:""};
-    this.state = { fname: "", lname: "", address: "", phoneNumber: "" ,key:this.userId};
+  
+    this.state = { fname: "", email: "", phoneNumber: "" ,key:this.userId,type:""};
 
     this.handleFirstName = this.handleFirstName.bind(this);
-    this.handleLastName = this.handleLastName.bind(this);
-    this.handleAddress = this.handleAddress.bind(this);
+    this.handleAddress = this.handleEmail.bind(this);
     this.handlePhoneNumber = this.handlePhoneNumber.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,33 +21,30 @@ class User extends React.Component {
 
 
 // aux. functions
-   _validationName(str) {
-    var hasNumber = /\d/;   
-    if(hasNumber.test(str)) {
-      return false;
-    } 
-    return true;
-  }
+  //  _validationName(str) {
+  //   var hasNumber = /\d/;   
+  //   if(hasNumber.test(str)) {
+  //     return false;
+  //   } 
+  //   return true;
+  // }
   //
   handleFirstName(event) {
     this.isClicked = false;
-    if(this._validationName( event.target.value )){
       this.setState({ fname: event.target.value });
-    }else{
-      this.error.errorFName = "שם פרטי לא נכון"
-    }
+   
   }
-  handleLastName(event) {
+  // handleLastName(event) {
+  //   this.isClicked = false;
+  //   if(this._validationName( event.target.value )){
+  //     this.setState({ lname: event.target.value });
+  //   }else{
+  //     this.error.errorFName = "שם משפחה לא נכון"
+  //   }
+  // }
+  handleEmail(event) {
     this.isClicked = false;
-    if(this._validationName( event.target.value )){
-      this.setState({ lname: event.target.value });
-    }else{
-      this.error.errorFName = "שם משפחה לא נכון"
-    }
-  }
-  handleAddress(event) {
-    this.isClicked = false;
-    this.setState({ address: event.target.value });
+    this.setState({ email: event.target.value });
   }
   handlePhoneNumber(event) {
     this.isClicked = false;
@@ -80,12 +71,10 @@ class User extends React.Component {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
      
-         this.state = { fname: "", lname: "", address: "", phoneNumber: "" ,key:this.userId};
-
+         this.state = { fname: "", email:user.email, phoneNumber: "" ,type:"",key:this.userId}
         this.userId = user.uid;
         const userJson = await getDetailsUserById(user.uid);
-        this.setState({key:this.userId, fname: userJson.fname, lname: userJson.lname, address: userJson.address, phoneNumber: userJson.phoneNumber });
-        console.log(this.state)
+        this.setState({key:this.userId, fname: userJson.fname, email: userJson.email, phoneNumber: userJson.phoneNumber ,type:userJson.type});
         // ...
       } else {
         // User is signed out
@@ -97,35 +86,47 @@ class User extends React.Component {
   }
 
   render() {
-    const { fname, lname, address, phoneNumber } =this.state;
+    const { fname, email, phoneNumber,type } =this.state;
     return (
-      <div className="form-box">
+      <div className="Add">
         <form   onSubmit={this.handleSubmit} >
-          <label >
+       
+            {/* <input type="text"  placeholder={email} onChange={this.handleEmail} /> */}
+            <div className="col-6 col-md-4" > {email}</div>
 
-            <input type="text" dir="rtl" placeholder={fname} onChange={this.handleFirstName} />
             <span> </span>
-            :שם פרטי
-          </label>
+        
+
+          <h6>(כולל משפחה) שם</h6>
+          <input
+            type="text"
+            style={{ width: '100%' }}
+            value={fname}
+            onChange={this.handleFirstName}
+          />
+
           <label value="Ayy"></label>
-          <label>
+          <h6>טלפון</h6>
+          <input
+            style={{ width: '100%' }}
+            type="number"
+            maxLength="10"
+            value={phoneNumber}
+            onChange={this.handlePhoneNumber}
+          />
 
-            <input type="text" dir="rtl" placeholder={lname} onChange={this.handleLastName} />
-            <span> </span>
-            :שם משפחה
-          </label>
-          <label>
 
-            <input type="text" dir="rtl" placeholder={address} onChange={this.handleAddress} />
-            <span> </span>
-            :כתובת
-          </label>
-          <label>
+         
+          {/* <label>
             <input type="text" dir="rtl" placeholder={phoneNumber} onChange={this.handlePhoneNumber} />
             <span> </span>
             :נייד
-          </label>
-          <input style={{backgroundColor: '#343741', borderColor : '#343741', color : '#ffff' }}className="btnSubmit" type="submit" value="עדכון" disabled={this.isClicked} />
+          </label> */}
+          <div className="">
+          <button type="submit" className="btn" disabled={this.isClicked}>
+          עדכון
+        </button>
+          </div>
         </form>
       </div>
     );

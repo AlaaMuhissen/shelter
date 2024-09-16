@@ -46,13 +46,6 @@ input[type="file"] {
     border-right: 1px solid white;
 }
 
-.tab-content {
-    background-color: #f9fafb;
-}
-
-.tab-content {
-    background-color: #f9fafb;
-}
 
 .container-fluid {
     flex-direction: column;
@@ -88,6 +81,7 @@ input[type="file"] {
     float: right;
     text-align: right;
     width: 100%;
+    background-image: "b7.jpg";
 }
 
 .home .body1 {
@@ -302,3 +296,24 @@ div.infoDeta {
     font-size: 17px;
     font-weight:500;
 }
+
+ul {
+    display: flex;
+    
+}
+.dot {
+    height: 70px;
+    width: 70px;
+    background-color: rgb(247, 116, 9);
+    border-radius: 50%;
+    display: inline;
+    float: left;
+  }
+  .dot1 {
+    height: 100px;
+    width: 100px;
+    background-color: rgb(247, 116, 9);
+    border-radius: 50%;
+    display: inline;
+    float: left;
+  }
